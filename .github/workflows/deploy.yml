@@ -1,4 +1,5 @@
-name: Deploy Terraform AWS Infrastructure
+name: Deploy Terraform AWS Infrastructure and Upload CSV
+
 on:
   push:
     branches:
@@ -7,7 +8,7 @@ on:
 
 jobs:
   terraform:
-    name: Terraform Deploy
+    name: Terraform Deploy and S3 Upload
     runs-on: ubuntu-latest
 
     steps:
@@ -39,3 +40,12 @@ jobs:
       - name: Terraform Apply
         run: terraform apply -auto-approve
         working-directory: ./infra
+
+      #  New Step: Upload CSV file to existing S3 bucket
+      - name: Upload CSV file to S3
+        uses: aws-actions/s3-sync@v2
+        with:
+          bucket: flights-data-pipeline-bharath-2025
+          region: us-east-1
+          local-dir: ./data
+
