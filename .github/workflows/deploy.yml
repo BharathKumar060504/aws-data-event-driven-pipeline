@@ -43,7 +43,7 @@ jobs:
 
       #  New Step: Upload CSV file to existing S3 bucket
       - name: Upload CSV file to S3
-        uses: aws-actions/s3-sync@v2
+        uses: jakejarvis/s3-sync-action@v0.5.1
         with:
           bucket: flights-data-pipeline-bharath-2025
           region: ap-south-1
