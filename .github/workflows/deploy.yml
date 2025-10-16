@@ -51,4 +51,6 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         with:
           local-dir: ./data
-          delete: 'false'   # Optional: set to 'true' to sync & remove files not in local-dir
+          exclude: "*"
+          include: "*.csv"
+          delete: 'false'    # Optional: set to 'true' to sync & remove files not in local-dir
