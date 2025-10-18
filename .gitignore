@@ -1,5 +1,9 @@
-.terraform/
+# Terraform state files
 *.tfstate
 *.tfstate.backup
+
+# Lambda zip files
 *.zip
-__pycache__/
+
+.terraform/
+terraform.tfstate*
