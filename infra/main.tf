@@ -1,3 +1,11 @@
+terraform {
+  backend "s3" {
+    bucket = "flights-data-pipeline-bharath-2025"
+    key    = "terraform/state.tfstate"
+    region = "ap-south-1"
+  }
+}
+
 # --------------------------
 #  S3 Bucket for Data
 # --------------------------
