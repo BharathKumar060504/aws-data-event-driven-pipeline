@@ -1,0 +1,49 @@
+name: Deploy AWS Lambda Functions
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'lamda_functions/**.py'
+      - '.github/workflows/deploy-lambda.yml'
+
+jobs:
+  deploy-lambda:
+    name: Build and Deploy Lambda Functions
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+
+      - name: Zip Lambda functions
+        run: |
+          cd lamda_functions
+          zip -r process_flights_data.zip process_flights_data.py
+          zip -r generate_daily_report.zip generate_daily_report.py
+          mv *.zip ..
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-south-1
+
+      - name: Update process_flights_data Lambda
+        run: |
+          aws lambda update-function-code \
+            --function-name process_flights_data \
+            --zip-file fileb://process_flights_data.zip
+
+      - name: Update generate_daily_report Lambda
+        run: |
+          aws lambda update-function-code \
+            --function-name generate_daily_report \
+            --zip-file fileb://generate_daily_report.zip
